@@ -1,4 +1,4 @@
-const ADMIN_EMAIL = "Administração2026@gmail.com";
+const ADMIN_EMAIL = "Admmuitoforte12@gmail.com";
 const ADMIN_PASSWORD = "Senha@Forte.@demais!!2510";
 const KEY = "topcar_admin_session";
 
