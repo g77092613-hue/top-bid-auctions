@@ -49,9 +49,9 @@ export default function About() {
           {values.map((v) => (
             <div
               key={v.title}
-              className="rounded-2xl border border-border/60 bg-card-gradient p-5 shadow-card"
+              className="group rounded-2xl border border-border/60 bg-card-gradient p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20 transition-transform duration-300 group-hover:scale-110">
                 <v.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-4 font-display text-lg font-semibold">{v.title}</h3>
