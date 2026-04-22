@@ -175,7 +175,9 @@ export default function CarDetail() {
                 const typed = Number((amount || "").replace(/\D/g, ""));
                 const bidValue = typed > 0 ? typed : bid;
                 const carName = `${car.brand} ${car.model} ${car.year}`;
-                const msg = `Olá! Gostaria de dar um lance de ${formatBRL(bidValue)} no veículo ${carName}.`;
+                const name = (bidder || "").trim();
+                const greet = name ? `Olá! Meu nome é ${name}.` : "Olá!";
+                const msg = `${greet} Gostaria de dar um lance de ${formatBRL(bidValue)} no veículo ${carName}.`;
                 const href = `${WHATS}?text=${encodeURIComponent(msg)}`;
                 return (
                   <Button asChild variant="whatsapp" className="w-full h-12">
