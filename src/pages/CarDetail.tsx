@@ -144,12 +144,21 @@ export default function CarDetail() {
                       placeholder="Seu nome"
                       value={bidder}
                       onChange={(e) => setBidder(e.target.value)}
+                      maxLength={80}
                     />
                     <Input
                       placeholder={`Mínimo ${formatBRL(minNext)}`}
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={(e) => setAmount(formatBidInput(e.target.value))}
+                      onKeyDown={(e) => {
+                        if (
+                          ["Backspace", "Delete", "Tab", "Escape", "Enter", "ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key) ||
+                          ((e.ctrlKey || e.metaKey) && ["a", "c", "v", "x"].includes(e.key.toLowerCase()))
+                        ) return;
+                        if (!/[0-9]/.test(e.key)) e.preventDefault();
+                      }}
                       inputMode="numeric"
+                      pattern="[0-9]*"
                     />
                     <Button type="submit" variant="hero" className="w-full h-12">
                       <Gavel className="mr-2 h-4 w-4" /> Dar lance
