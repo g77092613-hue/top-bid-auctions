@@ -20,6 +20,13 @@ export default function CarDetail() {
   const [bidder, setBidder] = useState("");
   const [amount, setAmount] = useState<string>("");
 
+  const formatBidInput = (raw: string) => {
+    const digits = raw.replace(/\D/g, "");
+    if (!digits) return "";
+    const n = Number(digits);
+    return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  };
+
   useEffect(() => {
     if (!id) return;
     const refresh = () => setCar(getCar(id));
