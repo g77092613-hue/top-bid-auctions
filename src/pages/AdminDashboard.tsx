@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { isAdmin, logout } from "@/lib/auth";
 import { Car, currentBid, deleteCar, formatBRL, loadCars, statusOf, upsertCar } from "@/lib/auctions";
-import { Plus, Pencil, Trash2, LogOut, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, LogOut, ExternalLink, Upload, X, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 
 const empty = (): Car => ({
@@ -245,6 +245,100 @@ function Field({ label, value, onChange, type = "text" }: { label: string; value
     <div className="space-y-1.5">
       <Label className="text-xs">{label}</Label>
       <Input type={type} value={value} onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+function GalleryField({ images, onChange }: { images: string[]; onChange: (imgs: string[]) => void }) {
+  const [url, setUrl] = useState("");
+
+  const handleFiles = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const readers = Array.from(files).map(
+      (file) =>
+        new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        })
+    );
+    Promise.all(readers).then((results) => onChange([...images, ...results]));
+  };
+
+  const addUrl = () => {
+    if (!url.trim()) return;
+    onChange([...images, url.trim()]);
+    setUrl("");
+  };
+
+  const removeAt = (i: number) => onChange(images.filter((_, idx) => idx !== i));
+
+  return (
+    <div className="space-y-3 rounded-xl border border-border/60 bg-background/40 p-4">
+      <div className="flex items-center gap-2">
+        <ImageIcon className="h-4 w-4 text-gold" />
+        <Label className="text-xs font-semibold uppercase tracking-wider">
+          Galeria de imagens {images.length > 0 && <span className="text-muted-foreground">({images.length})</span>}
+        </Label>
+      </div>
+      <p className="text-xs text-muted-foreground">A primeira imagem será usada como capa do veículo.</p>
+
+      {images.length > 0 && (
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+          {images.map((src, i) => (
+            <div key={i} className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-secondary">
+              <img src={src} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
+              {i === 0 && (
+                <span className="absolute left-1 top-1 rounded bg-gold/90 px-1.5 py-0.5 text-[10px] font-bold text-background">
+                  CAPA
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={() => removeAt(i)}
+                className="absolute right-1 top-1 rounded-full bg-destructive/90 p-1 text-destructive-foreground opacity-0 transition-opacity group-hover:opacity-100"
+                aria-label="Remover"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="grid gap-2 sm:grid-cols-2">
+        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-background/50 px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground">
+          <Upload className="h-4 w-4" />
+          Enviar fotos do dispositivo
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => {
+              handleFiles(e.target.files);
+              e.target.value = "";
+            }}
+          />
+        </label>
+        <div className="flex gap-2">
+          <Input
+            placeholder="Ou cole uma URL de imagem"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                addUrl();
+              }
+            }}
+          />
+          <Button type="button" variant="outline" onClick={addUrl}>
+            Adicionar
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
