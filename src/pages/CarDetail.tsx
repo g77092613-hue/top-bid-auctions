@@ -20,6 +20,13 @@ export default function CarDetail() {
   const [bidder, setBidder] = useState("");
   const [amount, setAmount] = useState<string>("");
 
+  const formatBidInput = (raw: string) => {
+    const digits = raw.replace(/\D/g, "");
+    if (!digits) return "";
+    const n = Number(digits);
+    return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  };
+
   useEffect(() => {
     if (!id) return;
     const refresh = () => setCar(getCar(id));
@@ -137,12 +144,21 @@ export default function CarDetail() {
                       placeholder="Seu nome"
                       value={bidder}
                       onChange={(e) => setBidder(e.target.value)}
+                      maxLength={80}
                     />
                     <Input
                       placeholder={`Mínimo ${formatBRL(minNext)}`}
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={(e) => setAmount(formatBidInput(e.target.value))}
+                      onKeyDown={(e) => {
+                        if (
+                          ["Backspace", "Delete", "Tab", "Escape", "Enter", "ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key) ||
+                          ((e.ctrlKey || e.metaKey) && ["a", "c", "v", "x"].includes(e.key.toLowerCase()))
+                        ) return;
+                        if (!/[0-9]/.test(e.key)) e.preventDefault();
+                      }}
                       inputMode="numeric"
+                      pattern="[0-9]*"
                     />
                     <Button type="submit" variant="hero" className="w-full h-12">
                       <Gavel className="mr-2 h-4 w-4" /> Dar lance
@@ -159,7 +175,9 @@ export default function CarDetail() {
                 const typed = Number((amount || "").replace(/\D/g, ""));
                 const bidValue = typed > 0 ? typed : bid;
                 const carName = `${car.brand} ${car.model} ${car.year}`;
-                const msg = `Olá! Gostaria de dar um lance de ${formatBRL(bidValue)} no veículo ${carName}.`;
+                const name = (bidder || "").trim();
+                const greet = name ? `Olá! Meu nome é ${name}.` : "Olá!";
+                const msg = `${greet} Gostaria de dar um lance de ${formatBRL(bidValue)} no veículo ${carName}.`;
                 const href = `${WHATS}?text=${encodeURIComponent(msg)}`;
                 return (
                   <Button asChild variant="whatsapp" className="w-full h-12">
