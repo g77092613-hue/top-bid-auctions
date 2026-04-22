@@ -207,7 +207,6 @@ export default function AdminDashboard() {
               <Field label="Marca" value={editing.brand} onChange={(v) => setEditing({ ...editing, brand: v })} />
               <Field label="Modelo" value={editing.model} onChange={(v) => setEditing({ ...editing, model: v })} />
               <Field label="Ano" type="number" value={String(editing.year)} onChange={(v) => setEditing({ ...editing, year: Number(v) })} />
-              <Field label="URL da imagem" value={editing.image} onChange={(v) => setEditing({ ...editing, image: v })} />
               <Field label="Quilometragem" type="number" value={String(editing.mileage)} onChange={(v) => setEditing({ ...editing, mileage: Number(v) })} />
               <Field label="Cor" value={editing.color} onChange={(v) => setEditing({ ...editing, color: v })} />
               <Field label="Combustível" value={editing.fuel} onChange={(v) => setEditing({ ...editing, fuel: v })} />
@@ -221,6 +220,14 @@ export default function AdminDashboard() {
               <Field label="Incremento mínimo (R$)" type="number" value={String(editing.minIncrement)} onChange={(v) => setEditing({ ...editing, minIncrement: Number(v) })} />
               <Field label="Início do leilão" type="datetime-local" value={editing.startAt} onChange={(v) => setEditing({ ...editing, startAt: v })} />
               <Field label="Encerramento" type="datetime-local" value={editing.endAt} onChange={(v) => setEditing({ ...editing, endAt: v })} />
+
+              <div className="sm:col-span-2">
+                <GalleryField
+                  images={editing.images ?? (editing.image ? [editing.image] : [])}
+                  onChange={(imgs) => setEditing({ ...editing, images: imgs, image: imgs[0] ?? "" })}
+                />
+              </div>
+
               <div className="sm:col-span-2 flex justify-end gap-2 pt-2">
                 <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
                 <Button variant="hero" onClick={save}>Salvar</Button>
