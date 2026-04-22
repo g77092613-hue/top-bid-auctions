@@ -155,11 +155,20 @@ export default function CarDetail() {
                 )}
               </div>
 
-              <Button asChild variant="whatsapp" className="w-full h-12">
-                <a href={WHATS} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="mr-2 h-4 w-4" /> Falar no WhatsApp
-                </a>
-              </Button>
+              {(() => {
+                const typed = Number((amount || "").replace(/\D/g, ""));
+                const bidValue = typed > 0 ? typed : bid;
+                const carName = `${car.brand} ${car.model} ${car.year}`;
+                const msg = `Olá! Gostaria de dar um lance de ${formatBRL(bidValue)} no veículo ${carName}.`;
+                const href = `${WHATS}?text=${encodeURIComponent(msg)}`;
+                return (
+                  <Button asChild variant="whatsapp" className="w-full h-12">
+                    <a href={href} target="_blank" rel="noopener noreferrer">
+                      <MessageCircle className="mr-2 h-4 w-4" /> Falar no WhatsApp
+                    </a>
+                  </Button>
+                );
+              })()}
             </div>
           </aside>
         </div>
