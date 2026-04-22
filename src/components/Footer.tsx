@@ -13,7 +13,7 @@ export default function Footer() {
           </p>
         </div>
 
-        <div id="sobre">
+        <div>
           <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gold">Navegação</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><a href="/#catalogo" className="hover:text-foreground transition-colors">Catálogo</a></li>

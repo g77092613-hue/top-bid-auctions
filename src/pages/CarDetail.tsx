@@ -70,9 +70,7 @@ export default function CarDetail() {
 
         <div className="mt-6 grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <div className="overflow-hidden rounded-2xl border border-border/60 bg-card">
-              <img src={car.image} alt={`${car.brand} ${car.model}`} className="w-full aspect-[16/10] object-cover" />
-            </div>
+            <Gallery images={(car.images && car.images.length ? car.images : [car.image])} alt={`${car.brand} ${car.model}`} />
 
             <div className="mt-6">
               <div className="flex flex-wrap items-center gap-3">
@@ -167,6 +165,34 @@ export default function CarDetail() {
         </div>
       </main>
       <Footer />
+    </div>
+  );
+}
+
+function Gallery({ images, alt }: { images: string[]; alt: string }) {
+  const [active, setActive] = useState(0);
+  const current = images[active] ?? images[0];
+  return (
+    <div className="space-y-3">
+      <div className="overflow-hidden rounded-2xl border border-border/60 bg-card">
+        <img src={current} alt={alt} className="w-full aspect-[16/10] object-cover" />
+      </div>
+      {images.length > 1 && (
+        <div className="grid grid-cols-5 gap-2 sm:grid-cols-6">
+          {images.map((src, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setActive(i)}
+              className={`aspect-square overflow-hidden rounded-lg border transition-all ${
+                i === active ? "border-primary ring-2 ring-primary/40" : "border-border hover:border-primary/50"
+              }`}
+            >
+              <img src={src} alt={`${alt} ${i + 1}`} className="h-full w-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
