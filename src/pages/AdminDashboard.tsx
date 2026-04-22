@@ -22,6 +22,7 @@ const empty = (): Car => ({
   model: "",
   year: new Date().getFullYear(),
   image: "",
+  images: [],
   mileage: 0,
   color: "",
   fuel: "Flex",
@@ -70,11 +71,14 @@ export default function AdminDashboard() {
   const save = () => {
     if (!editing) return;
     if (!editing.brand || !editing.model) return toast.error("Preencha marca e modelo.");
+    const gallery = (editing.images ?? []).filter(Boolean);
+    const cover = editing.image || gallery[0] || "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1200&q=80";
     const car: Car = {
       ...editing,
       startAt: new Date(editing.startAt).toISOString(),
       endAt: new Date(editing.endAt).toISOString(),
-      image: editing.image || "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1200&q=80",
+      image: cover,
+      images: gallery.length ? gallery : [cover],
     };
     upsertCar(car);
     toast.success("Veículo salvo.");

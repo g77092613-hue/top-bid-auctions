@@ -13,6 +13,7 @@ export interface Car {
   model: string;
   year: number;
   image: string;
+  images?: string[];
   mileage: number;
   color: string;
   fuel: string;
