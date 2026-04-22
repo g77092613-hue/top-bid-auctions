@@ -158,7 +158,6 @@ export default function CarDetail() {
                         if (!/[0-9]/.test(e.key)) e.preventDefault();
                       }}
                       inputMode="numeric"
-                      pattern="[0-9]*"
                     />
                     <Button type="submit" variant="hero" className="w-full h-12">
                       <Gavel className="mr-2 h-4 w-4" /> Dar lance
